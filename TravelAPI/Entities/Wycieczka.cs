@@ -10,8 +10,6 @@ namespace TravelAPI.Entities
 
         public int PokojId { get; set; }
 
-        public bool AllInclusive { get; set; }
-
         [ForeignKey("PokojId")]
         public Pokoj Pokoj { get; set; }
 

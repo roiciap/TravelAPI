@@ -8,7 +8,7 @@ namespace TravelAPI
     {
         public TravelMapper()
         {
-            CreateMap<Klient, KlientDto>();
+            CreateMap<Klient, LoginDto>();
 
             CreateMap<Rezerwacja, RezerwacjaDto>();
 

@@ -48,13 +48,18 @@ namespace TravelAPI.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<string>("Imie")
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("passwordHash")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Nazwisko")
+                    b.Property<string>("username")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Klienci");
                 });
@@ -87,9 +92,6 @@ namespace TravelAPI.Migrations
                     b.Property<int>("HotelId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Rodzaj")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("koszt")
                         .HasColumnType("int");
 
@@ -120,15 +122,28 @@ namespace TravelAPI.Migrations
                     b.ToTable("Rezerwacje");
                 });
 
-            modelBuilder.Entity("TravelAPI.Entities.Wycieczka", b =>
+            modelBuilder.Entity("TravelAPI.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<bool>("AllInclusive")
-                        .HasColumnType("bit");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("TravelAPI.Entities.Wycieczka", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
 
                     b.Property<int>("PokojId")
                         .HasColumnType("int");
@@ -156,6 +171,17 @@ namespace TravelAPI.Migrations
                     b.Navigation("Lokalizacja");
                 });
 
+            modelBuilder.Entity("TravelAPI.Entities.Klient", b =>
+                {
+                    b.HasOne("TravelAPI.Entities.Role", "Role")
+                        .WithMany("users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("TravelAPI.Entities.Pokoj", b =>
                 {
                     b.HasOne("TravelAPI.Entities.Hotel", "Hotel")
@@ -170,7 +196,7 @@ namespace TravelAPI.Migrations
             modelBuilder.Entity("TravelAPI.Entities.Rezerwacja", b =>
                 {
                     b.HasOne("TravelAPI.Entities.Klient", "Klient")
-                        .WithMany()
+                        .WithMany("Rezerwacje")
                         .HasForeignKey("KlientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -202,6 +228,11 @@ namespace TravelAPI.Migrations
                     b.Navigation("Pokoje");
                 });
 
+            modelBuilder.Entity("TravelAPI.Entities.Klient", b =>
+                {
+                    b.Navigation("Rezerwacje");
+                });
+
             modelBuilder.Entity("TravelAPI.Entities.Pokoj", b =>
                 {
                     b.Navigation("Wycieczki");
@@ -210,6 +241,11 @@ namespace TravelAPI.Migrations
             modelBuilder.Entity("TravelAPI.Entities.Rezerwacja", b =>
                 {
                     b.Navigation("Wycieczki");
+                });
+
+            modelBuilder.Entity("TravelAPI.Entities.Role", b =>
+                {
+                    b.Navigation("users");
                 });
 #pragma warning restore 612, 618
         }

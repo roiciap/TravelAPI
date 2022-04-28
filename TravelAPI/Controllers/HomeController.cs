@@ -20,12 +20,12 @@ namespace TravelAPI.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return Ok();
         }
 
         public IActionResult Privacy()
         {
-            return View();
+            return Ok();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

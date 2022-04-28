@@ -10,6 +10,7 @@ namespace TravelAPI.Entities
         public DbSet<Pokoj> Pokoje { get; set; }
         public DbSet<Rezerwacja> Rezerwacje { get; set; }
         public DbSet<Wycieczka> Wycieczki { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
 
         public DataBase(DbContextOptions<DataBase> options) : base(options)
@@ -20,6 +21,12 @@ namespace TravelAPI.Entities
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Role>()
+            .Property(r => r.Name)
+            .IsRequired();
+
+            
+
             modelBuilder.Entity<Pokoj>()
                 .Property(p => p.HotelId)
                 .IsRequired();

@@ -1,42 +1,49 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using TravelAPI.Entities;
 using TravelAPI.Models;
+using TravelAPI.Services;
 
 namespace TravelAPI.Controllers
 {
+    [Route("api/account")]
+    [ApiController]
     public class KlientController : Controller
     {
-        private readonly DataBase _db;
+
         private readonly IMapper _mapper;
+        private readonly IAccountService _service;
 
-        public KlientController(DataBase db,IMapper mapper)
+        public KlientController(DataBase db,IMapper mapper,IAccountService service)
         {
-            _db = db;
             _mapper = mapper;
+            _service = service;
+        }
+        [HttpPost("register")]
+        public ActionResult RegisterUser([FromBody] RegisterKlientDto user )
+        {
+            if(_service.RegisterUser(user))
+                return Ok();
+            return BadRequest();
+        }
+        [HttpPost("login")]
+        public ActionResult LoginUser([FromBody] LoginDto user)
+        {
+            var ret = _service.LoginUser(user);
+            if (ret != null)
+                return Ok(ret);
+
+            return BadRequest();
         }
 
-        [HttpGet("/api/all/klient")]
-        public ActionResult<IEnumerable<KlientDto>> getAll()
+        [HttpGet("check")]
+        [Authorize]
+        public ActionResult check()
         {
-            var klients = _db
-                .Klienci
-                .ToList();
-
-            var klientsDto=_mapper.Map<List<KlientDto>>(klients);
-            return Ok(klientsDto);
-        }
-        [HttpGet("/api/klient/{id}")]
-        public ActionResult<IEnumerable<KlientDto>> getById([FromRoute]int id)
-        {
-            var k = _db
-                .Klienci
-                .SingleOrDefault(k=>k.Id==id);
-
-            var result = _mapper.Map<KlientDto>(k);
-            return Ok(result);
+            return Ok();
         }
     }
 }

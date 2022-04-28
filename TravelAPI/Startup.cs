@@ -11,6 +11,14 @@ using System.Threading.Tasks;
 using TravelAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using TravelAPI.Services;
+using Microsoft.AspNetCore.Identity;
+using FluentValidation;
+using TravelAPI.Models;
+using TravelAPI.Validators;
+using FluentValidation.AspNetCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace TravelAPI
 {
@@ -26,8 +34,31 @@ namespace TravelAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var authenicationSettings = new AuthenticationSettings();
+            Configuration.GetSection("Authentication").Bind(authenicationSettings);
+            services.AddSingleton(authenicationSettings);
+            services.AddAuthentication(option =>
+            {
+                option.DefaultAuthenticateScheme = "Bearer";
+                option.DefaultScheme = "Bearer";
+                option.DefaultChallengeScheme = "Bearer";
+            }).AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = authenicationSettings.JwtIssuer,
+                    ValidAudience = authenicationSettings.JwtIssuer,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenicationSettings.JwtKey)),
+                };
+            });
+
             services.AddDbContext<DataBase>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddControllersWithViews();
+            services.AddControllers().AddFluentValidation();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IPasswordHasher<Klient>, PasswordHasher<Klient>>();
+            services.AddScoped<IValidator<RegisterKlientDto>, RegisterValidator>();
             services.AddAutoMapper(this.GetType().Assembly);
         }
 
@@ -38,18 +69,14 @@ namespace TravelAPI
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            app.UseAuthentication();//
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+           // app.UseStaticFiles();
+
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthorization();//
 
             app.UseEndpoints(endpoints =>
             {
@@ -58,7 +85,8 @@ namespace TravelAPI
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            DBInit.Seed(app);
+            DBInit.Seed(app);//
+            app.UseAuthentication();//
 
         }
     }

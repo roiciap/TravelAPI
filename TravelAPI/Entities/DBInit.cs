@@ -14,28 +14,22 @@ namespace TravelAPI.Entities
                 var context = serviceScope.ServiceProvider.GetService<DataBase>();
                 context.Database.EnsureCreated();
 
-                if (!context.Klienci.Any())
+                if (!context.Roles.Any())
                 {
-                    context.Klienci.AddRange(new List<Klient>()
+                    context.Roles.AddRange(new List<Role>()
                     {
-                        new Klient()
-                        {
-                            Imie = "Mateusz",
-                            Nazwisko ="Bazior"
-                        },
-                         new Klient()
-                        {
-                            Imie = "Daniel",
-                            Nazwisko ="Latas"
-                        },
-                        new Klient()
-                        {
-                            Imie = "Bartosz",
-                            Nazwisko ="Lato"
-                        }
+                     new Role()
+                     {
+                         Name ="normal"
+                     },
+                     new Role()
+                     {
+                         Name ="admin"
+                     }
                     });
                     context.SaveChanges();
                 }
+             
             }
         }
     }

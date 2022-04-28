@@ -6,7 +6,6 @@ namespace TravelAPI.Entities
     public class Pokoj
     {
         public int Id { get; set; }
-        public string Rodzaj { get; set; }
         public int koszt { get; set; }
 
         public int HotelId { get; set; }
