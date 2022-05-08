@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TravelAPI.Entities
 {
@@ -8,10 +9,12 @@ namespace TravelAPI.Entities
 
         public int RezerwacjaId { get; set; }
 
-        public int PokojId { get; set; }
+        public int HotelId { get; set; }
+        public DateTime DateStart { get; set; }
+        public DateTime DateEnd { get; set; }
 
-        [ForeignKey("PokojId")]
-        public Pokoj Pokoj { get; set; }
+        [ForeignKey("HotelId")]
+        public Hotel Hotel { get; set; }
 
         [ForeignKey("RezerwacjaId")]
         public Rezerwacja Rezerwacja{ get; set; }

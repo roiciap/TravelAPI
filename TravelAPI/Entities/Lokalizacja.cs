@@ -13,6 +13,6 @@ namespace TravelAPI.Entities
 
         public string Miasto { get; set; }
 
-        List<Hotel> Hotele { get; set; }
+        public List<Hotel> Hotele { get; set; }
     }
 }

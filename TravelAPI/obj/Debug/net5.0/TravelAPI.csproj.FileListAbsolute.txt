@@ -146,3 +146,4 @@ C:\Users\Bazyl\Documents\GitHub\TravelAPI\TravelAPI\bin\Debug\net5.0\FluentValid
 C:\Users\Bazyl\Documents\GitHub\TravelAPI\TravelAPI\bin\Debug\net5.0\FluentValidation.DependencyInjectionExtensions.dll
 C:\Users\Bazyl\Documents\GitHub\TravelAPI\TravelAPI\obj\Debug\net5.0\TravelAPI.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Bazyl\Documents\GitHub\TravelAPI\TravelAPI\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Bazyl\Documents\GitHub\TravelAPI\TravelAPI\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.Google.dll

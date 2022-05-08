@@ -6,6 +6,5 @@ namespace TravelAPI.Models
     {
         // public int Id { get; set; }
         public bool AllInclusive { get; set; }
-        public PokojDto Pokoj { get; set; }
     }
 }

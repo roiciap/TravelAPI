@@ -7,7 +7,6 @@ namespace TravelAPI.Entities
         public DbSet<Hotel> Hotele { get; set; }
         public DbSet<Klient> Klienci {get;set;}
         public DbSet<Lokalizacja> Lokalizacje { get; set; }
-        public DbSet<Pokoj> Pokoje { get; set; }
         public DbSet<Rezerwacja> Rezerwacje { get; set; }
         public DbSet<Wycieczka> Wycieczki { get; set; }
         public DbSet<Role> Roles { get; set; }
@@ -25,11 +24,7 @@ namespace TravelAPI.Entities
             .Property(r => r.Name)
             .IsRequired();
 
-            
-
-            modelBuilder.Entity<Pokoj>()
-                .Property(p => p.HotelId)
-                .IsRequired();
+ 
             modelBuilder.Entity<Hotel>()
                 .Property(h => h.LokalizacjaId)
                 .IsRequired();
@@ -37,7 +32,7 @@ namespace TravelAPI.Entities
                 .Property(w => w.RezerwacjaId)
                 .IsRequired();
             modelBuilder.Entity<Wycieczka>()
-                .Property(w => w.PokojId)
+                .Property(w => w.HotelId)
                 .IsRequired();
             modelBuilder.Entity<Rezerwacja>()
                 .Property(w => w.KlientId)

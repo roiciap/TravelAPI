@@ -14,10 +14,9 @@ namespace TravelAPI
 
             CreateMap<Wycieczka, WycieczkaDto>();
 
-            CreateMap<Pokoj, PokojDto>()
-                .ForMember(pd => pd.NazwaHotelu, p => p.MapFrom(h => h.Hotel.Nazwa));
-
-            CreateMap<Hotel, HotelDto>();
+            CreateMap<Hotel, HotelDto>()
+                .ForMember(h => h.Miasto, d => d.MapFrom(l => l.Lokalizacja.Miasto))
+                .ForMember(h => h.Kraj, d => d.MapFrom(l => l.Lokalizacja.Kraj));
         }
     }
 }
