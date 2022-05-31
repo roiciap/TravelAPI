@@ -20,6 +20,8 @@ using FluentValidation.AspNetCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using TravelAPI.Authorization;
 
 namespace TravelAPI
 {
@@ -35,15 +37,25 @@ namespace TravelAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy("AllowAnyOrigin",
+                      builder =>
+                      {
+                          builder.AllowAnyOrigin()
+                                 .AllowAnyMethod()
+                                 .AllowAnyHeader();
+                      }));
+
+
+
             var authenicationSettings = new AuthenticationSettings();
             Configuration.GetSection("Authentication").Bind(authenicationSettings);
             services.AddSingleton(authenicationSettings);
             services.AddAuthentication(option =>
             {
                 option.DefaultAuthenticateScheme = "Bearer";
-                // option.DefaultScheme = "Bearer";
+                 option.DefaultScheme = "Bearer";
                 option.DefaultChallengeScheme = "Bearer";
-                option.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                //option.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 
             }).AddJwtBearer(cfg =>
             {
@@ -67,8 +79,10 @@ namespace TravelAPI
         });
             services.AddDbContext<DataBase>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers().AddFluentValidation();
+            services.AddScoped<IAuthorizationHandler, UserOperationRequirementHandler>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IHotelService, HotelService>();
+            services.AddScoped<IRezerwacjaService, RezerwacjaService>();
             services.AddScoped<IPasswordHasher<Klient>, PasswordHasher<Klient>>();
             services.AddScoped<IValidator<RegisterKlientDto>, RegisterValidator>();
             services.AddAutoMapper(this.GetType().Assembly);
@@ -88,18 +102,19 @@ namespace TravelAPI
 
 
             app.UseRouting();
-
+            app.UseCors("AllowAnyOrigin");
             app.UseAuthorization();//
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                /*     endpoints.MapControllerRoute(
+                         name: "default",
+                         pattern: "{controller=Home}/{action=Index}/{id?}");*/
+                endpoints.MapControllers();
             });
 
             DBInit.Seed(app);//
-            app.UseAuthentication();//
+          //  app.UseAuthentication();//
 
         }
     }

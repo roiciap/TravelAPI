@@ -122,17 +122,17 @@ namespace TravelAPI.Entities
                     });
                     context.SaveChanges();
                 }
-                if (!context.Rezerwacje.Any())
+               /*if (!context.Rezerwacje.Any())
                 {
                     context.Rezerwacje.AddRange(new List<Rezerwacja>()
                     {
                         new Rezerwacja()
                         {
-                            KlientId=1,
+                            KlientId=2,
                         },
                         new Rezerwacja()
                         {
-                            KlientId=1,
+                            KlientId=2,
                         },
                     });
                     context.SaveChanges();
@@ -164,7 +164,7 @@ namespace TravelAPI.Entities
                         },
                     });
                     context.SaveChanges();
-                }
+                }*/
 
             }
         }

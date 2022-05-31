@@ -45,7 +45,7 @@ namespace TravelAPI.Services
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
-                new Claim(ClaimTypes.Name, $"{user.username}"),
+                new Claim(ClaimTypes.Name,$"{user.username}"),
                 new Claim(ClaimTypes.Role,$"{user.Role.Name}")
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));

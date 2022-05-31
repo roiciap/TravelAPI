@@ -25,7 +25,7 @@ namespace TravelAPI.Controllers
             return Ok();
         }
         [HttpGet("get")]
-        public IActionResult getHotels()
+        public ActionResult<IEnumerable<List<HotelDto>>> getHotels()
         {
             var hotele = _service.GetAllHotels();
             
